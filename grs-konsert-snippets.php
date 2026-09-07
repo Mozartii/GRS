@@ -91,47 +91,31 @@ add_shortcode('grs_neste', function($atts) {
             letter-spacing: 0.12em !important; text-transform: uppercase !important;
             padding: 4px 10px !important; border-radius: 4px !important; line-height: 1.4 !important;
         }
-
-        /* ── Content panel ─────────────────────────────────────
-           Pulled up over the bottom of the photo (negative
-           margin-top). Background color is sampled from the photo
-           right at the seam (see the companion script at the
-           bottom of this file), darkened slightly, with white text
-           on top. */
-        .gnk-kort__innhold {
-            position: relative !important;
-            z-index: 2 !important;
-            margin: -54px 14px 0 !important;
-            padding: 16px 20px 18px !important;
-            border-radius: 12px !important;
-            background: var(--gnk-tint, #1a1815) !important;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.18) !important;
-            overflow: hidden !important;
-        }
+        .gnk-kort__innhold { padding: 16px 20px 18px !important; background: #ffffff !important; margin: 0 !important; }
         .gnk-kort__tittel {
             font-size: 22px !important; font-weight: 600 !important;
-            line-height: 1.2 !important; color: #ffffff !important;
+            line-height: 1.2 !important; color: #1a1815 !important;
             margin: 0 0 4px 0 !important; padding: 0 !important;
             text-decoration: none !important; display: block !important; border: none !important; background: none !important;
         }
-        .gnk-kort__sted { font-size: 12px !important; color: rgba(255,255,255,0.72) !important; margin: 0 0 14px 0 !important; padding: 0 !important; }
+        .gnk-kort__sted { font-size: 12px !important; color: #999 !important; margin: 0 0 14px 0 !important; padding: 0 !important; }
         .gnk-kort__bunn {
             display: flex !important; align-items: center !important; justify-content: space-between !important;
-            gap: 10px !important; padding-top: 12px !important; border-top: 1px solid rgba(255,255,255,0.22) !important;
-            background: none !important; margin: 0 !important; flex-wrap: wrap !important;
+            gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #eeebe6 !important;
+            background: #ffffff !important; margin: 0 !important; flex-wrap: wrap !important;
         }
         .gnk-kort__dato { display: flex !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }
         .gnk-kort__dato-dag {
             font-size: 40px !important; font-weight: 300 !important;
-            line-height: 1 !important; color: #ffffff !important; letter-spacing: -0.02em !important;
+            line-height: 1 !important; color: #1a1815 !important; letter-spacing: -0.02em !important;
         }
         .gnk-kort__dato-info { display: flex !important; flex-direction: column !important; gap: 2px !important; }
         .gnk-kort__dato-mnd {
             font-size: 11px !important; font-weight: 600 !important; letter-spacing: 0.08em !important;
-            color: #ffffff !important; text-transform: uppercase !important;
+            color: #1a1815 !important; text-transform: uppercase !important;
         }
         .gnk-kort__dato-sub {
-            font-size: 11px !important; color: rgba(255,255,255,0.62) !important;
+            font-size: 11px !important; color: #aaa !important;
             display: flex !important; align-items: center !important; gap: 5px !important;
             white-space: nowrap !important;
         }
@@ -139,14 +123,14 @@ add_shortcode('grs_neste', function($atts) {
             display: flex !important; align-items: center !important; gap: 8px !important;
             flex-shrink: 0 !important; flex-wrap: wrap !important;
         }
-        .gnk-kort__pris { font-size: 13px !important; font-weight: 500 !important; color: rgba(255,255,255,0.82) !important; }
+        .gnk-kort__pris { font-size: 13px !important; font-weight: 500 !important; color: #555 !important; }
         .gnk-kort__btn {
             display: inline-block !important; font-size: 13px !important; font-weight: 500 !important;
             padding: 8px 16px !important; border-radius: 5px !important;
             text-decoration: none !important; line-height: 1.4 !important;
             cursor: pointer !important; border: none !important; white-space: nowrap !important;
         }
-        .gnk-kort__btn--sek { background: rgba(255,255,255,0.10) !important; color: #ffffff !important; border: 1px solid rgba(255,255,255,0.35) !important; }
+        .gnk-kort__btn--sek { background: transparent !important; color: #666 !important; border: 1px solid #ddd !important; }
         .gnk-kort__btn--prim { background: #3a5c33 !important; color: #fff !important; }
 
         /* ── LITEN ── */
@@ -173,54 +157,43 @@ add_shortcode('grs_neste', function($atts) {
             letter-spacing: 0.12em !important; text-transform: uppercase !important;
             padding: 3px 7px !important; border-radius: 3px !important; line-height: 1.4 !important;
         }
-
-        /* Same sampled-tint technique, scaled down for the mini card. */
-        .gnk-mini__innhold {
-            position: relative !important;
-            z-index: 2 !important;
-            margin: -30px 10px 0 !important;
-            padding: 9px 12px 11px !important;
-            border-radius: 9px !important;
-            background: var(--gnk-mini-tint, #1a1815) !important;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.18) !important;
-            overflow: hidden !important;
-        }
+        .gnk-mini__innhold { padding: 9px 12px 11px !important; background: #ffffff !important; margin: 0 !important; }
         .gnk-mini__tittel {
             font-size: 15px !important; font-weight: 600 !important;
-            line-height: 1.2 !important; color: #ffffff !important;
+            line-height: 1.2 !important; color: #1a1815 !important;
             margin: 0 0 2px 0 !important; padding: 0 !important;
             text-decoration: none !important; display: block !important; border: none !important; background: none !important;
         }
-        .gnk-mini__sted { font-size: 10px !important; color: rgba(255,255,255,0.72) !important; margin: 0 0 8px 0 !important; padding: 0 !important; }
+        .gnk-mini__sted { font-size: 10px !important; color: #999 !important; margin: 0 0 8px 0 !important; padding: 0 !important; }
         .gnk-mini__bunn {
             display: flex !important; align-items: center !important; justify-content: space-between !important;
-            gap: 8px !important; padding-top: 8px !important; border-top: 1px solid rgba(255,255,255,0.22) !important;
-            background: none !important; margin: 0 !important; flex-wrap: wrap !important;
+            gap: 8px !important; padding-top: 8px !important; border-top: 1px solid #eeebe6 !important;
+            background: #ffffff !important; margin: 0 !important; flex-wrap: wrap !important;
         }
         .gnk-mini__dato { display: flex !important; align-items: center !important; gap: 5px !important; flex-shrink: 0 !important; }
         .gnk-mini__dato-dag {
             font-size: 26px !important; font-weight: 300 !important;
-            line-height: 1 !important; color: #ffffff !important; letter-spacing: -0.02em !important;
+            line-height: 1 !important; color: #1a1815 !important; letter-spacing: -0.02em !important;
         }
         .gnk-mini__dato-info { display: flex !important; flex-direction: column !important; gap: 1px !important; }
         .gnk-mini__dato-mnd {
             font-size: 9px !important; font-weight: 600 !important; letter-spacing: 0.08em !important;
-            color: #ffffff !important; text-transform: uppercase !important;
+            color: #1a1815 !important; text-transform: uppercase !important;
         }
         .gnk-mini__dato-sub {
-            font-size: 9px !important; color: rgba(255,255,255,0.62) !important;
+            font-size: 9px !important; color: #aaa !important;
             display: flex !important; align-items: center !important; gap: 3px !important;
             white-space: nowrap !important;
         }
         .gnk-mini__knapper { display: flex !important; align-items: center !important; gap: 6px !important; flex-shrink: 0 !important; }
-        .gnk-mini__pris { font-size: 11px !important; font-weight: 500 !important; color: rgba(255,255,255,0.82) !important; }
+        .gnk-mini__pris { font-size: 11px !important; font-weight: 500 !important; color: #555 !important; }
         .gnk-mini__btn {
             display: inline-block !important; font-size: 11px !important; font-weight: 500 !important;
             padding: 6px 12px !important; border-radius: 5px !important;
             text-decoration: none !important; line-height: 1.4 !important;
             cursor: pointer !important; border: none !important; white-space: nowrap !important;
         }
-        .gnk-mini__btn--sek { background: rgba(255,255,255,0.10) !important; color: #ffffff !important; border: 1px solid rgba(255,255,255,0.35) !important; }
+        .gnk-mini__btn--sek { background: transparent !important; color: #666 !important; border: 1px solid #ddd !important; }
         .gnk-mini__btn--prim { background: #3a5c33 !important; color: #fff !important; }
 
         /* ── MOBILE ── */
@@ -394,36 +367,24 @@ add_shortcode('grs_konsert_grid', function($atts) {
             font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
             padding: 3px 9px; border-radius: 3px;
         }
-
-        /* Same sampled-tint technique as .gnk-kort__innhold. */
-        .grsg-stor__innhold {
-            position: relative;
-            z-index: 2;
-            margin: -46px 12px 0;
-            padding: 16px 18px 18px;
-            border-radius: 10px;
-            display: flex; flex-direction: column; flex: 1;
-            background: var(--grsg-tint, #1a1815);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
-            overflow: hidden;
-        }
+        .grsg-stor__innhold { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; }
         .grsg-stor__tittel {
             font-size: 22px; font-weight: 600; line-height: 1.2;
-            color: #ffffff !important; margin: 0 0 5px; text-decoration: none; display: block;
+            color: #1a1815 !important; margin: 0 0 5px; text-decoration: none; display: block;
         }
-        .grsg-stor__sted { font-size: 11px; color: rgba(255,255,255,0.68); margin-bottom: 14px; }
+        .grsg-stor__sted { font-size: 11px; color: #aaa; margin-bottom: 14px; }
         .grsg-stor__bunn {
             display: flex; align-items: center; justify-content: space-between;
-            gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.22);
+            gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid #eeebe6;
             flex-wrap: wrap;
         }
         .grsg-stor__dato { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-        .grsg-stor__dag { font-size: 36px; font-weight: 300; line-height: 1; color: #ffffff; letter-spacing: -0.02em; }
+        .grsg-stor__dag { font-size: 36px; font-weight: 300; line-height: 1; color: #1a1815; letter-spacing: -0.02em; }
         .grsg-stor__dato-info { display: flex; flex-direction: column; gap: 2px; }
-        .grsg-stor__mnd { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #ffffff; }
-        .grsg-stor__sub { font-size: 10px; color: rgba(255,255,255,0.62); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+        .grsg-stor__mnd { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #1a1815; }
+        .grsg-stor__sub { font-size: 10px; color: #aaa; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
         .grsg-stor__knapper { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
-        .grsg-stor__pris { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.8); }
+        .grsg-stor__pris { font-size: 12px; font-weight: 500; color: #555; }
 
         /* ── SIDE ── */
         .grsg-side { display: flex; flex-direction: column; gap: 14px; height: 100%; }
@@ -440,36 +401,25 @@ add_shortcode('grs_konsert_grid', function($atts) {
             font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
             padding: 2px 6px; border-radius: 3px;
         }
-
-        .grsg-mini__innhold {
-            position: relative;
-            z-index: 2;
-            margin: -26px 8px 0;
-            padding: 8px 10px 10px;
-            border-radius: 8px;
-            flex-shrink: 0;
-            background: var(--grsg-mini-tint, #1a1815);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
-            overflow: hidden;
-        }
+        .grsg-mini__innhold { padding: 8px 10px 10px; flex-shrink: 0; }
         .grsg-mini__tittel {
             font-size: 13px; font-weight: 600; line-height: 1.25;
-            color: #ffffff !important; margin: 0 0 2px;
+            color: #1a1815 !important; margin: 0 0 2px;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
-        .grsg-mini__sted { font-size: 9px; color: rgba(255,255,255,0.68); margin-bottom: 6px; }
+        .grsg-mini__sted { font-size: 9px; color: #aaa; margin-bottom: 6px; }
         .grsg-mini__bunn {
             display: flex; align-items: center; justify-content: space-between;
-            padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.22);
+            padding-top: 6px; border-top: 1px solid #eeebe6;
             gap: 6px; flex-wrap: wrap;
         }
         .grsg-mini__dato { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-        .grsg-mini__dag { font-size: 20px; font-weight: 300; line-height: 1; color: #ffffff; letter-spacing: -0.02em; }
+        .grsg-mini__dag { font-size: 20px; font-weight: 300; line-height: 1; color: #1a1815; letter-spacing: -0.02em; }
         .grsg-mini__dato-info { display: flex; flex-direction: column; }
-        .grsg-mini__mnd { font-size: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #ffffff; }
-        .grsg-mini__sub { display: flex; align-items: center; gap: 3px; font-size: 8px; color: rgba(255,255,255,0.6); white-space: nowrap; }
+        .grsg-mini__mnd { font-size: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #1a1815; }
+        .grsg-mini__sub { display: flex; align-items: center; gap: 3px; font-size: 8px; color: #aaa; white-space: nowrap; }
         .grsg-mini__knapper { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-        .grsg-mini__pris { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.8); }
+        .grsg-mini__pris { font-size: 9px; font-weight: 500; color: #555; }
 
         /* ── BUTTONS ── */
         .grsg-btn, .grsg-mini-btn {
@@ -479,7 +429,7 @@ add_shortcode('grs_konsert_grid', function($atts) {
         }
         .grsg-btn      { font-size: 12px; padding: 7px 14px; }
         .grsg-mini-btn { font-size: 9px;  padding: 4px 8px; }
-        .grsg-btn--sek,      .grsg-mini-btn--sek { background: rgba(255,255,255,0.10); color: #ffffff !important; border: 1px solid rgba(255,255,255,0.35); }
+        .grsg-btn--sek,      .grsg-mini-btn--sek { background: transparent; color: #666 !important; border: 1px solid #ddd; }
         .grsg-btn--prim,     .grsg-mini-btn--prim { background: #3a5c33; color: #fff !important; border: none; }
 
         /* ── RESPONSIVE ── */
@@ -575,90 +525,4 @@ add_shortcode('grs_konsert_grid', function($atts) {
     </div>
     <?php
     return ob_get_clean();
-});
-
-
-// ── GRS PANEL COLOR SAMPLING ────────────────────────────
-// Prints once (any page with at least one of the shortcodes above).
-// For every card, reads the pixel color of the photo right where
-// the content panel overlaps it (horizontal middle of the panel's
-// top edge, 2px up into the image) via <canvas>, darkens it a bit,
-// and sets it as --gnk-tint / --gnk-mini-tint / --grsg-tint /
-// --grsg-mini-tint so the panel's background matches the photo
-// instead of a fixed color. Falls back to the CSS default if the
-// canvas read fails (e.g. the image isn't same-origin).
-add_action('wp_footer', function () {
-    ?>
-    <script>
-    (function () {
-        "use strict";
-
-        var DARKEN = 0.78; // "litt mørknet"
-        var ALPHA  = 0.94; // near-opaque now that there's no blur to soften a sharp image edge showing through
-
-        function darken(channel) {
-            return Math.max(0, Math.round(channel * DARKEN));
-        }
-
-        function sampleTint(img, panel, cssVar) {
-            try {
-                var imgRect   = img.getBoundingClientRect();
-                var panelRect = panel.getBoundingClientRect();
-                if (!img.naturalWidth || !img.naturalHeight || !imgRect.width || !imgRect.height) return;
-
-                // Point in viewport space: middle of the panel's top edge, 2px up.
-                var pointX = panelRect.left + panelRect.width / 2;
-                var pointY = panelRect.top - 2;
-
-                // Map that viewport point into natural image pixel coordinates,
-                // accounting for object-fit: cover's scale + crop.
-                var scale     = Math.max(imgRect.width / img.naturalWidth, imgRect.height / img.naturalHeight);
-                var renderedW = img.naturalWidth * scale;
-                var renderedH = img.naturalHeight * scale;
-                var cropX     = (renderedW - imgRect.width) / 2;
-                var cropY     = (renderedH - imgRect.height) / 2;
-
-                var relX = pointX - imgRect.left;
-                var relY = pointY - imgRect.top;
-
-                var nx = Math.round((relX + cropX) / scale);
-                var ny = Math.round((relY + cropY) / scale);
-                nx = Math.max(0, Math.min(img.naturalWidth - 1, nx));
-                ny = Math.max(0, Math.min(img.naturalHeight - 1, ny));
-
-                var canvas = document.createElement('canvas');
-                canvas.width = img.naturalWidth;
-                canvas.height = img.naturalHeight;
-                var ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                var d = ctx.getImageData(nx, ny, 1, 1).data;
-
-                var rgba = 'rgba(' + darken(d[0]) + ',' + darken(d[1]) + ',' + darken(d[2]) + ',' + ALPHA + ')';
-                panel.style.setProperty(cssVar, rgba);
-            } catch (e) {
-                // Cross-origin image without CORS headers taints the canvas —
-                // leave the CSS fallback color in place.
-            }
-        }
-
-        function wire(imgSelector, panelSelector, cardSelector, cssVar) {
-            document.querySelectorAll(panelSelector).forEach(function (panel) {
-                var card = panel.closest(cardSelector);
-                if (!card) return;
-                var img = card.querySelector(imgSelector);
-                if (!img) return;
-
-                function run() { sampleTint(img, panel, cssVar); }
-                if (img.complete && img.naturalWidth) run();
-                else img.addEventListener('load', run);
-            });
-        }
-
-        wire('.gnk-kort__bilde img',  '.gnk-kort__innhold',  '.gnk-kort',  '--gnk-tint');
-        wire('.gnk-mini__bilde img',  '.gnk-mini__innhold',  '.gnk-mini',  '--gnk-mini-tint');
-        wire('.grsg-stor__bilde img', '.grsg-stor__innhold', '.grsg-stor', '--grsg-tint');
-        wire('.grsg-mini__bilde img', '.grsg-mini__innhold', '.grsg-mini', '--grsg-mini-tint');
-    })();
-    </script>
-    <?php
 });
