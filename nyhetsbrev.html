@@ -65,6 +65,12 @@
     object-fit: contain;
     filter: brightness(0) invert(1);
 }
+/* GRS logo: true color inversion (black circle -> white, white
+   icon -> black) instead of flattening to a solid white blob —
+   same fix as the header's own GRS logo. */
+.grs-nb__logo-grs {
+    filter: invert(1);
+}
 
 .grs-nb__content {
     position: relative;
@@ -204,7 +210,7 @@
 
     <div class="grs-nb__logos">
         <img src="https://operatilfolket.no/wp-content/uploads/2022/07/cropped-logo-munnkvadrat.png" alt="">
-        <img src="https://operatilfolket.no/wp-content/uploads/2022/08/cropped-logo-ms-ICONO-black-01.png" alt="">
+        <img class="grs-nb__logo-grs" src="https://operatilfolket.no/wp-content/uploads/2022/08/cropped-logo-ms-ICONO-black-01.png" alt="">
     </div>
 
     <div class="grs-nb__content">
