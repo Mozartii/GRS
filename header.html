@@ -297,17 +297,13 @@
     transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
 }
 
-/* Short, soft, dark seam where the mega menu meets the header —
-   replaces the old full-width hard-edged highlight line. A faded
-   gradient reads as "soft" reliably; filter: blur() on a 3px-tall
-   element rendered inconsistently (looked broken/dashed). */
+/* Full-width seam where the mega menu meets the header. */
 .otf-mega-menu::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 220px;
+    left: 0;
+    width: 100%;
     height: 2px;
     background: var(--otf-divider-color);
     pointer-events: none;
@@ -591,11 +587,12 @@
             <!-- OPERA TIL FOLKET -->
             <div class="otf-mega-column">
                 <h3>Opera til Folket</h3>
-                <a href="https://operatilfolket.no/program">Program</a>
-                <a href="https://operatilfolket.no/oslo-operafestival">Oslo Operafestival</a>
-                <a href="https://operatilfolket.no/artister">Artister</a>
-                <a href="https://operatilfolket.no/prosjekter">Prosjekter</a>
-                <a href="https://operatilfolket.no/bli-med">Bli med</a>
+                <a href="https://operatilfolket.no/konserter/">Program</a>
+                <a href="https://operatilfolket.no/festival/festival-2025/">Operafestival</a>
+                <a href="https://operatilfolket.no/artister/">Artister</a>
+                <a href="https://operatilfolket.no/om-oss/">Om oss</a>
+                <a href="https://operatilfolket.no/kontakt/">Kontakt</a>
+                <a href="https://operatilfolket.no/bli-med">Bli medlem</a>
             </div>
 
             <!-- FELLES -->
@@ -604,8 +601,6 @@
                 <a href="/">Hjem</a>
                 <a href="/om-oss">Om oss</a>
                 <a href="/kontakt">Kontakt</a>
-                <a href="/presse">Presse</a>
-                <a href="/personvernerklaering">Personvernerklæring</a>
             </div>
 
         </div>
