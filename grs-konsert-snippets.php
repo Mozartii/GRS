@@ -2,6 +2,7 @@
 add_shortcode('grs_neste', function($atts) {
     static $style_printed = false;
     $a = shortcode_atts(array('offset' => 0, 'konsept' => '', 'size' => 'stor'), $atts);
+    $liten = ($a['size'] === 'liten');
     $tax_query = array();
     if (!empty($a['konsept'])) {
         $tax_query = array(
@@ -58,17 +59,22 @@ add_shortcode('grs_neste', function($atts) {
         $style_printed = true;
         ?>
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Inter:wght@400;500;600&display=swap');
+        /* ── SHARED FONT STACK ── */
+        .gnk-kort, .gnk-kort *,
+        .gnk-mini, .gnk-mini * {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        /* ── STOR ── */
         .gnk-kort {
             display: block !important; width: 100% !important; max-width: 100% !important;
             background: #ffffff !important; border-radius: 10px !important;
             overflow: hidden !important; box-shadow: 0 2px 16px rgba(0,0,0,0.09) !important;
             text-decoration: none !important; color: #1a1815 !important;
-            font-family: 'Inter', sans-serif !important; cursor: pointer;
-            position: relative !important; margin: 0 !important; padding: 0 !important;
-            border: none !important; box-sizing: border-box !important;
+            cursor: pointer; position: relative !important;
+            margin: 0 !important; padding: 0 !important; border: none !important;
         }
-        .gnk-kort * { box-sizing: border-box; }
         .gnk-kort__bilde {
             display: block !important; width: 100% !important; position: relative !important;
             overflow: hidden !important; aspect-ratio: 16/8 !important;
@@ -90,8 +96,9 @@ add_shortcode('grs_neste', function($atts) {
            Pulled up over the bottom of the photo (negative
            margin-top) so backdrop-filter blurs the real image
            behind it. Base tint is the color sampled from the
-           image right at the seam (see the companion script),
-           darkened slightly, with white text on top. */
+           image right at the seam (see the companion script at
+           the bottom of this file), darkened slightly, with
+           white text on top. */
         .gnk-kort__innhold {
             position: relative !important;
             z-index: 2 !important;
@@ -106,8 +113,8 @@ add_shortcode('grs_neste', function($atts) {
             overflow: hidden !important;
         }
         .gnk-kort__tittel {
-            font-family: 'Cormorant Garamond', serif !important; font-size: 26px !important;
-            font-weight: 600 !important; line-height: 1.2 !important; color: #ffffff !important;
+            font-size: 22px !important; font-weight: 600 !important;
+            line-height: 1.2 !important; color: #ffffff !important;
             margin: 0 0 4px 0 !important; padding: 0 !important;
             text-decoration: none !important; display: block !important; border: none !important; background: none !important;
         }
@@ -115,36 +122,157 @@ add_shortcode('grs_neste', function($atts) {
         .gnk-kort__bunn {
             display: flex !important; align-items: center !important; justify-content: space-between !important;
             gap: 10px !important; padding-top: 12px !important; border-top: 1px solid rgba(255,255,255,0.22) !important;
-            background: none !important; margin: 0 !important;
+            background: none !important; margin: 0 !important; flex-wrap: wrap !important;
         }
-        .gnk-kort__dato { display: flex !important; align-items: center !important; gap: 8px !important; }
+        .gnk-kort__dato { display: flex !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }
         .gnk-kort__dato-dag {
-            font-family: 'Cormorant Garamond', serif !important; font-size: 44px !important;
-            font-weight: 600 !important; line-height: 1 !important; color: #ffffff !important;
+            font-size: 40px !important; font-weight: 300 !important;
+            line-height: 1 !important; color: #ffffff !important; letter-spacing: -0.02em !important;
         }
-        .gnk-kort__dato-info { display: flex !important; flex-direction: column !important; gap: 3px !important; }
+        .gnk-kort__dato-info { display: flex !important; flex-direction: column !important; gap: 2px !important; }
         .gnk-kort__dato-mnd {
-            font-size: 11px !important; font-weight: 600 !important; letter-spacing: 0.05em !important;
+            font-size: 11px !important; font-weight: 600 !important; letter-spacing: 0.08em !important;
             color: #ffffff !important; text-transform: uppercase !important;
         }
         .gnk-kort__dato-sub {
             font-size: 11px !important; color: rgba(255,255,255,0.62) !important;
             display: flex !important; align-items: center !important; gap: 5px !important;
+            white-space: nowrap !important;
         }
-        .gnk-kort__knapper { display: flex !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }
+        .gnk-kort__knapper {
+            display: flex !important; align-items: center !important; gap: 8px !important;
+            flex-shrink: 0 !important; flex-wrap: wrap !important;
+        }
         .gnk-kort__pris { font-size: 13px !important; font-weight: 500 !important; color: rgba(255,255,255,0.82) !important; }
         .gnk-kort__btn {
-            display: inline-block !important; font-family: 'Inter', sans-serif !important;
-            font-size: 13px !important; font-weight: 500 !important; padding: 8px 16px !important;
-            border-radius: 5px !important; text-decoration: none !important; line-height: 1.4 !important;
-            cursor: pointer !important; border: none !important;
+            display: inline-block !important; font-size: 13px !important; font-weight: 500 !important;
+            padding: 8px 16px !important; border-radius: 5px !important;
+            text-decoration: none !important; line-height: 1.4 !important;
+            cursor: pointer !important; border: none !important; white-space: nowrap !important;
         }
         .gnk-kort__btn--sek { background: rgba(255,255,255,0.10) !important; color: #ffffff !important; border: 1px solid rgba(255,255,255,0.35) !important; }
         .gnk-kort__btn--prim { background: #3a5c33 !important; color: #fff !important; }
+
+        /* ── LITEN ── */
+        .gnk-mini {
+            display: block !important; width: 100% !important; max-width: 100% !important;
+            background: #ffffff !important; border-radius: 10px !important;
+            overflow: hidden !important; box-shadow: 0 2px 10px rgba(0,0,0,0.07) !important;
+            text-decoration: none !important; color: #1a1815 !important;
+            cursor: pointer; margin: 0 !important; padding: 0 !important; border: none !important;
+        }
+        .gnk-mini__bilde {
+            display: block !important; width: 100% !important; position: relative !important;
+            overflow: hidden !important; aspect-ratio: 16/6 !important;
+            margin: 0 !important; padding: 0 !important; background: #111 !important;
+        }
+        .gnk-mini__bilde img {
+            display: block !important; width: 100% !important; height: 100% !important;
+            object-fit: cover !important; margin: 0 !important; padding: 0 !important; border: none !important;
+        }
+        .gnk-mini__gratis {
+            position: absolute !important; top: 8px !important; right: 8px !important;
+            background: #2a9e2a !important; color: #fff !important;
+            font-size: 8px !important; font-weight: 700 !important;
+            letter-spacing: 0.12em !important; text-transform: uppercase !important;
+            padding: 3px 7px !important; border-radius: 3px !important; line-height: 1.4 !important;
+        }
+
+        /* Same glass technique, scaled down for the mini card. */
+        .gnk-mini__innhold {
+            position: relative !important;
+            z-index: 2 !important;
+            margin: -30px 10px 0 !important;
+            padding: 9px 12px 11px !important;
+            border-radius: 9px !important;
+            background: var(--gnk-mini-tint, rgba(26,24,21,0.62)) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            backdrop-filter: blur(12px) !important;
+            backdrop-filter: blur(12px) saturate(150%) url(#gnkGlassDistortion) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.18) !important;
+            overflow: hidden !important;
+        }
+        .gnk-mini__tittel {
+            font-size: 15px !important; font-weight: 600 !important;
+            line-height: 1.2 !important; color: #ffffff !important;
+            margin: 0 0 2px 0 !important; padding: 0 !important;
+            text-decoration: none !important; display: block !important; border: none !important; background: none !important;
+        }
+        .gnk-mini__sted { font-size: 10px !important; color: rgba(255,255,255,0.72) !important; margin: 0 0 8px 0 !important; padding: 0 !important; }
+        .gnk-mini__bunn {
+            display: flex !important; align-items: center !important; justify-content: space-between !important;
+            gap: 8px !important; padding-top: 8px !important; border-top: 1px solid rgba(255,255,255,0.22) !important;
+            background: none !important; margin: 0 !important; flex-wrap: wrap !important;
+        }
+        .gnk-mini__dato { display: flex !important; align-items: center !important; gap: 5px !important; flex-shrink: 0 !important; }
+        .gnk-mini__dato-dag {
+            font-size: 26px !important; font-weight: 300 !important;
+            line-height: 1 !important; color: #ffffff !important; letter-spacing: -0.02em !important;
+        }
+        .gnk-mini__dato-info { display: flex !important; flex-direction: column !important; gap: 1px !important; }
+        .gnk-mini__dato-mnd {
+            font-size: 9px !important; font-weight: 600 !important; letter-spacing: 0.08em !important;
+            color: #ffffff !important; text-transform: uppercase !important;
+        }
+        .gnk-mini__dato-sub {
+            font-size: 9px !important; color: rgba(255,255,255,0.62) !important;
+            display: flex !important; align-items: center !important; gap: 3px !important;
+            white-space: nowrap !important;
+        }
+        .gnk-mini__knapper { display: flex !important; align-items: center !important; gap: 6px !important; flex-shrink: 0 !important; }
+        .gnk-mini__pris { font-size: 11px !important; font-weight: 500 !important; color: rgba(255,255,255,0.82) !important; }
+        .gnk-mini__btn {
+            display: inline-block !important; font-size: 11px !important; font-weight: 500 !important;
+            padding: 6px 12px !important; border-radius: 5px !important;
+            text-decoration: none !important; line-height: 1.4 !important;
+            cursor: pointer !important; border: none !important; white-space: nowrap !important;
+        }
+        .gnk-mini__btn--sek { background: rgba(255,255,255,0.10) !important; color: #ffffff !important; border: 1px solid rgba(255,255,255,0.35) !important; }
+        .gnk-mini__btn--prim { background: #3a5c33 !important; color: #fff !important; }
+
+        /* ── MOBILE ── */
+        @media (max-width: 480px) {
+            .gnk-mini__bunn { flex-direction: column !important; align-items: flex-start !important; }
+            .gnk-mini__knapper { width: 100% !important; justify-content: flex-end !important; }
+            .gnk-kort__bunn { flex-direction: column !important; align-items: flex-start !important; }
+            .gnk-kort__knapper { width: 100% !important; justify-content: flex-end !important; }
+        }
         </style>
         <?php
     }
-    ?>
+    if ($liten): ?>
+    <div class="gnk-mini" onclick="window.location='<?php echo esc_js($lenke); ?>'">
+        <div class="gnk-mini__bilde">
+            <?php if ($bilde_url): ?>
+            <img src="<?php echo esc_url($bilde_url); ?>" alt="<?php echo esc_attr($tittel); ?>">
+            <?php endif; ?>
+            <?php if ($gratis): ?><span class="gnk-mini__gratis">Gratis</span><?php endif; ?>
+        </div>
+        <div class="gnk-mini__innhold">
+            <span class="gnk-mini__tittel"><?php echo esc_html($tittel); ?></span>
+            <div class="gnk-mini__sted">📍 <?php echo esc_html($sted); ?></div>
+            <div class="gnk-mini__bunn">
+                <div class="gnk-mini__dato">
+                    <span class="gnk-mini__dato-dag"><?php echo esc_html($dag); ?></span>
+                    <div class="gnk-mini__dato-info">
+                        <span class="gnk-mini__dato-mnd"><?php echo esc_html($mnd); ?></span>
+                        <div class="gnk-mini__dato-sub">
+                            <?php if ($aar): ?><span><?php echo esc_html($aar); ?></span><?php endif; ?>
+                            <?php if ($tid): ?><span>·</span><span>kl <?php echo esc_html($tid); ?></span><?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="gnk-mini__knapper">
+                    <?php if (!$gratis && !empty($billettpris)): ?><span class="gnk-mini__pris"><?php echo esc_html($billettpris); ?></span><?php endif; ?>
+                    <a href="<?php echo esc_url($lenke); ?>" class="gnk-mini__btn gnk-mini__btn--sek" onclick="event.stopPropagation()">Les mer</a>
+                    <?php if (!$gratis && !empty($billett_url)): ?>
+                    <a href="<?php echo esc_url($billett_url); ?>" class="gnk-mini__btn gnk-mini__btn--prim" onclick="event.stopPropagation()">Kjøp billett</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php else: ?>
     <div class="gnk-kort" onclick="window.location='<?php echo esc_js($lenke); ?>'">
         <div class="gnk-kort__bilde">
             <?php if ($bilde_url): ?>
@@ -176,10 +304,9 @@ add_shortcode('grs_neste', function($atts) {
             </div>
         </div>
     </div>
-    <?php
+    <?php endif;
     return ob_get_clean();
 });
-
 
 // ── GRS KONSERT GRID ───────────────────────────────────
 add_shortcode('grs_konsert_grid', function($atts) {
@@ -246,30 +373,41 @@ add_shortcode('grs_konsert_grid', function($atts) {
         $grid_style_printed = true;
         ?>
         <style>
-        .grsg-grid {
-            display: grid; grid-template-columns: 3fr 2fr;
-            gap: 14px; align-items: stretch;
-            font-family: 'Inter', sans-serif; width: 100%;
+        /* ── GRID SHARED FONT ── */
+        .grsg-grid, .grsg-grid * {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
         }
+
+        .grsg-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 14px;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        /* ── STOR ── */
         .grsg-stor {
-            display: flex; flex-direction: column; background: #fff;
-            border-radius: 10px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,0.08);
-            cursor: pointer; height: 100%;
+            display: flex; flex-direction: column;
+            background: #fff; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.08); cursor: pointer; height: 100%;
         }
         .grsg-stor__bilde { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; flex-shrink: 0; }
         .grsg-stor__bilde img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .grsg-stor__badge {
-            position: absolute; top: 10px; right: 10px; background: #2a9e2a; color: #fff;
+            position: absolute; top: 10px; right: 10px;
+            background: #2a9e2a; color: #fff;
             font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
             padding: 3px 9px; border-radius: 3px;
         }
 
-        /* ── Glass content panel (same technique as .gnk-kort__innhold) ── */
+        /* Same glass technique as .gnk-kort__innhold. */
         .grsg-stor__innhold {
             position: relative;
             z-index: 2;
             margin: -46px 12px 0;
-            padding: 14px 16px 16px;
+            padding: 16px 18px 18px;
             border-radius: 10px;
             display: flex; flex-direction: column; flex: 1;
             background: var(--grsg-tint, rgba(26,24,21,0.62));
@@ -280,32 +418,35 @@ add_shortcode('grs_konsert_grid', function($atts) {
             overflow: hidden;
         }
         .grsg-stor__tittel {
-            font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600;
-            line-height: 1.2; color: #ffffff !important; margin: 0 0 5px; text-decoration: none; display: block;
+            font-size: 22px; font-weight: 600; line-height: 1.2;
+            color: #ffffff !important; margin: 0 0 5px; text-decoration: none; display: block;
         }
         .grsg-stor__sted { font-size: 11px; color: rgba(255,255,255,0.68); margin-bottom: 14px; }
         .grsg-stor__bunn {
             display: flex; align-items: center; justify-content: space-between;
             gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.22);
+            flex-wrap: wrap;
         }
-        .grsg-stor__dato { display: flex; align-items: center; gap: 5px; }
-        .grsg-stor__dag { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 600; line-height: 1; color: #ffffff; }
+        .grsg-stor__dato { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .grsg-stor__dag { font-size: 36px; font-weight: 300; line-height: 1; color: #ffffff; letter-spacing: -0.02em; }
         .grsg-stor__dato-info { display: flex; flex-direction: column; gap: 2px; }
-        .grsg-stor__mnd { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #ffffff; }
-        .grsg-stor__aar { font-size: 10px; color: rgba(255,255,255,0.55); }
-        .grsg-stor__tid { font-size: 10px; color: rgba(255,255,255,0.55); }
+        .grsg-stor__mnd { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #ffffff; }
+        .grsg-stor__sub { font-size: 10px; color: rgba(255,255,255,0.62); display: flex; align-items: center; gap: 4px; white-space: nowrap; }
         .grsg-stor__knapper { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
         .grsg-stor__pris { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.8); }
+
+        /* ── SIDE ── */
         .grsg-side { display: flex; flex-direction: column; gap: 14px; height: 100%; }
         .grsg-mini {
             flex: 1; min-height: 0; display: flex; flex-direction: column;
             background: #fff; border-radius: 10px; overflow: hidden;
             box-shadow: 0 2px 14px rgba(0,0,0,0.08); cursor: pointer;
         }
-        .grsg-mini__bilde { position: relative; width: 100%; flex: 1; min-height: 40px; overflow: hidden; }
+        .grsg-mini__bilde { position: relative; width: 100%; flex: 1; min-height: 60px; overflow: hidden; }
         .grsg-mini__bilde img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .grsg-mini__badge {
-            position: absolute; top: 6px; right: 6px; background: #2a9e2a; color: #fff;
+            position: absolute; top: 6px; right: 6px;
+            background: #2a9e2a; color: #fff;
             font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
             padding: 2px 6px; border-radius: 3px;
         }
@@ -314,7 +455,7 @@ add_shortcode('grs_konsert_grid', function($atts) {
             position: relative;
             z-index: 2;
             margin: -26px 8px 0;
-            padding: 6px 9px 8px;
+            padding: 8px 10px 10px;
             border-radius: 8px;
             flex-shrink: 0;
             background: var(--grsg-mini-tint, rgba(26,24,21,0.62));
@@ -325,35 +466,48 @@ add_shortcode('grs_konsert_grid', function($atts) {
             overflow: hidden;
         }
         .grsg-mini__tittel {
-            font-family: 'Cormorant Garamond', serif; font-size: 12px; font-weight: 600;
-            line-height: 1.2; color: #ffffff !important; margin: 0 0 1px;
+            font-size: 13px; font-weight: 600; line-height: 1.25;
+            color: #ffffff !important; margin: 0 0 2px;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
-        .grsg-mini__sted { font-size: 9px; color: rgba(255,255,255,0.68); margin-bottom: 5px; }
+        .grsg-mini__sted { font-size: 9px; color: rgba(255,255,255,0.68); margin-bottom: 6px; }
         .grsg-mini__bunn {
             display: flex; align-items: center; justify-content: space-between;
-            padding-top: 5px; border-top: 1px solid rgba(255,255,255,0.22);
+            padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.22);
+            gap: 6px; flex-wrap: wrap;
         }
-        .grsg-mini__dato { display: flex; align-items: center; gap: 4px; }
-        .grsg-mini__dag { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; line-height: 1; color: #ffffff; }
+        .grsg-mini__dato { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+        .grsg-mini__dag { font-size: 20px; font-weight: 300; line-height: 1; color: #ffffff; letter-spacing: -0.02em; }
         .grsg-mini__dato-info { display: flex; flex-direction: column; }
-        .grsg-mini__mnd { font-size: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: #ffffff; }
-        .grsg-mini__sub { display: flex; align-items: center; gap: 3px; font-size: 8px; color: rgba(255,255,255,0.6); }
+        .grsg-mini__mnd { font-size: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #ffffff; }
+        .grsg-mini__sub { display: flex; align-items: center; gap: 3px; font-size: 8px; color: rgba(255,255,255,0.6); white-space: nowrap; }
         .grsg-mini__knapper { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
         .grsg-mini__pris { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.8); }
+
+        /* ── BUTTONS ── */
         .grsg-btn, .grsg-mini-btn {
-            font-family: 'Inter', sans-serif; font-weight: 500;
-            border-radius: 5px; text-decoration: none !important; cursor: pointer; display: inline-block;
+            font-weight: 500; border-radius: 5px;
+            text-decoration: none !important; cursor: pointer;
+            display: inline-block; white-space: nowrap;
         }
-        .grsg-btn { font-size: 12px; padding: 7px 14px; }
-        .grsg-mini-btn { font-size: 9px; padding: 3px 7px; }
-        .grsg-btn--sek, .grsg-mini-btn--sek { background: rgba(255,255,255,0.10); color: #ffffff !important; border: 1px solid rgba(255,255,255,0.35); }
-        .grsg-btn--prim, .grsg-mini-btn--prim { background: #3a5c33; color: #fff !important; border: none; }
-        @media (max-width: 600px) {
+        .grsg-btn      { font-size: 12px; padding: 7px 14px; }
+        .grsg-mini-btn { font-size: 9px;  padding: 4px 8px; }
+        .grsg-btn--sek,      .grsg-mini-btn--sek { background: rgba(255,255,255,0.10); color: #ffffff !important; border: 1px solid rgba(255,255,255,0.35); }
+        .grsg-btn--prim,     .grsg-mini-btn--prim { background: #3a5c33; color: #fff !important; border: none; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
             .grsg-grid { grid-template-columns: 1fr; }
             .grsg-side { height: auto; }
-            .grsg-mini { flex: none; }
-            .grsg-mini__bilde { height: 120px; flex: none; }
+            .grsg-mini { flex: none; min-height: 0; }
+            .grsg-mini__bilde { height: 160px; flex: none; }
+            .grsg-stor__bilde { aspect-ratio: 16/7; }
+        }
+        @media (max-width: 480px) {
+            .grsg-stor__bunn  { flex-direction: column; align-items: flex-start; }
+            .grsg-stor__knapper { width: 100%; justify-content: flex-end; }
+            .grsg-mini__bunn  { flex-direction: column; align-items: flex-start; }
+            .grsg-mini__knapper { width: 100%; justify-content: flex-end; }
         }
         </style>
         <?php
@@ -376,8 +530,10 @@ add_shortcode('grs_konsert_grid', function($atts) {
                         <span class="grsg-stor__dag"><?php echo esc_html($k['dag']); ?></span>
                         <div class="grsg-stor__dato-info">
                             <span class="grsg-stor__mnd"><?php echo esc_html($k['mnd']); ?></span>
-                            <span class="grsg-stor__aar"><?php echo esc_html($k['aar']); ?></span>
-                            <?php if ($k['tid']): ?><span class="grsg-stor__tid">kl <?php echo esc_html($k['tid']); ?></span><?php endif; ?>
+                            <div class="grsg-stor__sub">
+                                <span><?php echo esc_html($k['aar']); ?></span>
+                                <?php if ($k['tid']): ?><span>·</span><span>kl <?php echo esc_html($k['tid']); ?></span><?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="grsg-stor__knapper">
@@ -391,6 +547,7 @@ add_shortcode('grs_konsert_grid', function($atts) {
             </div>
         </div>
         <?php endif; ?>
+
         <div class="grsg-side">
             <?php foreach (array(1, 2) as $idx):
                 if (empty($konsert[$idx])) continue;
@@ -435,13 +592,13 @@ add_shortcode('grs_konsert_grid', function($atts) {
 
 
 // ── GRS GLASS PANEL COLOR SAMPLING ─────────────────────
-// Prints once (any page that has at least one of the two shortcodes
-// above). For every card, reads the pixel color of the photo right
-// where the glass panel overlaps it (horizontal middle of the
-// panel's top edge, 2px up into the image) via <canvas>, darkens it
-// a bit, and sets it as --gnk-tint / --grsg-tint / --grsg-mini-tint
-// so the glass panel's background matches the photo instead of a
-// fixed color. Falls back to the CSS default (a plain dark tint) if
+// Prints once (any page with at least one of the shortcodes above).
+// For every card, reads the pixel color of the photo right where
+// the glass panel overlaps it (horizontal middle of the panel's top
+// edge, 2px up into the image) via <canvas>, darkens it a bit, and
+// sets it as --gnk-tint / --gnk-mini-tint / --grsg-tint /
+// --grsg-mini-tint so the glass panel's background matches the
+// photo instead of a fixed color. Falls back to the CSS default if
 // the canvas read fails (e.g. the image isn't same-origin).
 add_action('wp_footer', function () {
     ?>
@@ -509,9 +666,9 @@ add_action('wp_footer', function () {
             }
         }
 
-        function wire(imgSelector, panelSelector, cssVar) {
+        function wire(imgSelector, panelSelector, cardSelector, cssVar) {
             document.querySelectorAll(panelSelector).forEach(function (panel) {
-                var card = panel.closest('.gnk-kort, .grsg-stor, .grsg-mini');
+                var card = panel.closest(cardSelector);
                 if (!card) return;
                 var img = card.querySelector(imgSelector);
                 if (!img) return;
@@ -522,9 +679,10 @@ add_action('wp_footer', function () {
             });
         }
 
-        wire('.gnk-kort__bilde img',   '.gnk-kort__innhold',    '--gnk-tint');
-        wire('.grsg-stor__bilde img',  '.grsg-stor__innhold',   '--grsg-tint');
-        wire('.grsg-mini__bilde img',  '.grsg-mini__innhold',   '--grsg-mini-tint');
+        wire('.gnk-kort__bilde img',  '.gnk-kort__innhold',  '.gnk-kort',  '--gnk-tint');
+        wire('.gnk-mini__bilde img',  '.gnk-mini__innhold',  '.gnk-mini',  '--gnk-mini-tint');
+        wire('.grsg-stor__bilde img', '.grsg-stor__innhold', '.grsg-stor', '--grsg-tint');
+        wire('.grsg-mini__bilde img', '.grsg-mini__innhold', '.grsg-mini', '--grsg-mini-tint');
     })();
     </script>
     <?php
