@@ -49,6 +49,23 @@
     pointer-events: none;
 }
 
+.grs-nb__logos {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.grs-nb__logos img {
+    display: block;
+    height: 26px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
 .grs-nb__content {
     position: relative;
     z-index: 1;
@@ -163,6 +180,8 @@
     .grs-nb__tittel    { font-size: 23px; }
     .grs-nb__ingress   { font-size: 14px; margin-bottom: 26px; }
     .grs-nb__rad--submit { flex-direction: column; }
+    .grs-nb__logos     { top: 12px; right: 14px; gap: 8px; }
+    .grs-nb__logos img { height: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -182,6 +201,11 @@
 
 <div class="grs-nb">
     <div class="grs-nb__glass"></div>
+
+    <div class="grs-nb__logos">
+        <img src="https://operatilfolket.no/wp-content/uploads/2022/07/cropped-logo-munnkvadrat.png" alt="">
+        <img src="https://operatilfolket.no/wp-content/uploads/2022/08/cropped-logo-ms-ICONO-black-01.png" alt="">
+    </div>
 
     <div class="grs-nb__content">
         <div class="grs-nb__tittel">Hold deg oppdatert</div>
