@@ -48,17 +48,15 @@
 .otf-header.otf-sticky {
     position: fixed;
     opacity: 0;
-    transform: translateY(-16px);
     pointer-events: none;
+    /* Appears/disappears instantly — no opacity or transform
+       transition here, only the glass hover/scroll ones. */
     transition:
-        opacity 0.3s ease,
-        transform 0.3s ease,
         border-color var(--otf-transition),
         box-shadow var(--otf-transition);
 }
 .otf-header.otf-sticky.otf-sticky-visible {
     opacity: 1;
-    transform: translateY(0);
     pointer-events: auto;
 }
 
@@ -646,7 +644,6 @@
        the plain header in its normal (absolute) position.
        ─────────────────────────────────────────────────────── */
     var lastScrollY = window.scrollY;
-    var scrollDelta  = 6; // ignore tiny jitters so direction doesn't flicker
 
     function updateScroll() {
         var currentY = window.scrollY;
@@ -668,7 +665,8 @@
             header.classList.remove("otf-sticky", "otf-sticky-visible");
         } else {
             header.classList.add("otf-sticky");
-            if (Math.abs(currentY - lastScrollY) > scrollDelta) {
+            // Any upward movement at all reveals it instantly.
+            if (currentY !== lastScrollY) {
                 if (currentY < lastScrollY) {
                     header.classList.add("otf-sticky-visible");
                 } else {
