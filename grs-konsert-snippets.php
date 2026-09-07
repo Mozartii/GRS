@@ -92,23 +92,19 @@ add_shortcode('grs_neste', function($atts) {
             padding: 4px 10px !important; border-radius: 4px !important; line-height: 1.4 !important;
         }
 
-        /* ── Glass content panel ──────────────────────────────
+        /* ── Content panel ─────────────────────────────────────
            Pulled up over the bottom of the photo (negative
-           margin-top) so backdrop-filter blurs the real image
-           behind it. Base tint is the color sampled from the
-           image right at the seam (see the companion script at
-           the bottom of this file), darkened slightly, with
-           white text on top. */
+           margin-top). Background color is sampled from the photo
+           right at the seam (see the companion script at the
+           bottom of this file), darkened slightly, with white text
+           on top. */
         .gnk-kort__innhold {
             position: relative !important;
             z-index: 2 !important;
             margin: -54px 14px 0 !important;
             padding: 16px 20px 18px !important;
             border-radius: 12px !important;
-            background: var(--gnk-tint, rgba(26,24,21,0.62)) !important;
-            -webkit-backdrop-filter: blur(16px) !important;
-            backdrop-filter: blur(16px) !important;
-            backdrop-filter: blur(16px) saturate(150%) url(#gnkGlassDistortion) !important;
+            background: var(--gnk-tint, #1a1815) !important;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.18) !important;
             overflow: hidden !important;
         }
@@ -178,17 +174,14 @@ add_shortcode('grs_neste', function($atts) {
             padding: 3px 7px !important; border-radius: 3px !important; line-height: 1.4 !important;
         }
 
-        /* Same glass technique, scaled down for the mini card. */
+        /* Same sampled-tint technique, scaled down for the mini card. */
         .gnk-mini__innhold {
             position: relative !important;
             z-index: 2 !important;
             margin: -30px 10px 0 !important;
             padding: 9px 12px 11px !important;
             border-radius: 9px !important;
-            background: var(--gnk-mini-tint, rgba(26,24,21,0.62)) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
-            backdrop-filter: blur(12px) !important;
-            backdrop-filter: blur(12px) saturate(150%) url(#gnkGlassDistortion) !important;
+            background: var(--gnk-mini-tint, #1a1815) !important;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.18) !important;
             overflow: hidden !important;
         }
@@ -402,7 +395,7 @@ add_shortcode('grs_konsert_grid', function($atts) {
             padding: 3px 9px; border-radius: 3px;
         }
 
-        /* Same glass technique as .gnk-kort__innhold. */
+        /* Same sampled-tint technique as .gnk-kort__innhold. */
         .grsg-stor__innhold {
             position: relative;
             z-index: 2;
@@ -410,10 +403,7 @@ add_shortcode('grs_konsert_grid', function($atts) {
             padding: 16px 18px 18px;
             border-radius: 10px;
             display: flex; flex-direction: column; flex: 1;
-            background: var(--grsg-tint, rgba(26,24,21,0.62));
-            -webkit-backdrop-filter: blur(14px);
-            backdrop-filter: blur(14px);
-            backdrop-filter: blur(14px) saturate(150%) url(#grsgGlassDistortion);
+            background: var(--grsg-tint, #1a1815);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
             overflow: hidden;
         }
@@ -458,10 +448,7 @@ add_shortcode('grs_konsert_grid', function($atts) {
             padding: 8px 10px 10px;
             border-radius: 8px;
             flex-shrink: 0;
-            background: var(--grsg-mini-tint, rgba(26,24,21,0.62));
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px) saturate(150%) url(#grsgGlassDistortion);
+            background: var(--grsg-mini-tint, #1a1815);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
             overflow: hidden;
         }
@@ -591,35 +578,23 @@ add_shortcode('grs_konsert_grid', function($atts) {
 });
 
 
-// ── GRS GLASS PANEL COLOR SAMPLING ─────────────────────
+// ── GRS PANEL COLOR SAMPLING ────────────────────────────
 // Prints once (any page with at least one of the shortcodes above).
 // For every card, reads the pixel color of the photo right where
-// the glass panel overlaps it (horizontal middle of the panel's top
-// edge, 2px up into the image) via <canvas>, darkens it a bit, and
-// sets it as --gnk-tint / --gnk-mini-tint / --grsg-tint /
-// --grsg-mini-tint so the glass panel's background matches the
-// photo instead of a fixed color. Falls back to the CSS default if
-// the canvas read fails (e.g. the image isn't same-origin).
+// the content panel overlaps it (horizontal middle of the panel's
+// top edge, 2px up into the image) via <canvas>, darkens it a bit,
+// and sets it as --gnk-tint / --gnk-mini-tint / --grsg-tint /
+// --grsg-mini-tint so the panel's background matches the photo
+// instead of a fixed color. Falls back to the CSS default if the
+// canvas read fails (e.g. the image isn't same-origin).
 add_action('wp_footer', function () {
     ?>
-    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-        <filter id="gnkGlassDistortion" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.012" numOctaves="2" seed="4" result="gnkNoise"/>
-            <feGaussianBlur in="gnkNoise" stdDeviation="2" result="gnkSoftNoise"/>
-            <feDisplacementMap in="SourceGraphic" in2="gnkSoftNoise" scale="14" xChannelSelector="R" yChannelSelector="G"/>
-        </filter>
-        <filter id="grsgGlassDistortion" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.012" numOctaves="2" seed="9" result="grsgNoise"/>
-            <feGaussianBlur in="grsgNoise" stdDeviation="2" result="grsgSoftNoise"/>
-            <feDisplacementMap in="SourceGraphic" in2="grsgSoftNoise" scale="14" xChannelSelector="R" yChannelSelector="G"/>
-        </filter>
-    </svg>
     <script>
     (function () {
         "use strict";
 
         var DARKEN = 0.78; // "litt mørknet"
-        var ALPHA  = 0.62;
+        var ALPHA  = 0.94; // near-opaque now that there's no blur to soften a sharp image edge showing through
 
         function darken(channel) {
             return Math.max(0, Math.round(channel * DARKEN));
