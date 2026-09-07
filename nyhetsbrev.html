@@ -4,11 +4,6 @@
    language as the site header: dark glass, blur + liquid-glass
    distortion, red CTA, Helvetica).
    ========================================================= */
-.grs-nb-section {
-    padding: 100px 24px;
-    background: url('https://operatilfolket.no/wp-content/uploads/2026/08/Jean_Beraud_Personnages.jpeg') center / cover no-repeat;
-}
-
 .grs-nb {
     --grs-nb-glass: rgba(0, 0, 0, 0.48);
     --grs-nb-glass-border: rgba(255, 255, 255, 0.16);
@@ -17,25 +12,44 @@
     --grs-nb-red: #670303;
     --grs-nb-red-hover: #821010;
 
+    position: relative;
     box-sizing: border-box;
     max-width: 640px;
     margin: 0 auto;
-    padding: 48px 56px;
     border-radius: 28px;
-    background: var(--grs-nb-glass);
-    -webkit-backdrop-filter: blur(var(--grs-nb-blur));
-    backdrop-filter: blur(var(--grs-nb-blur));
-    backdrop-filter: var(--grs-nb-filter);
+    overflow: hidden;
+    /* The image lives on this outer box itself; a child layer on
+       top carries the blur, since an element can't blur its own
+       background with backdrop-filter — only what's behind it. */
+    background: url('https://operatilfolket.no/wp-content/uploads/2026/08/Jean_Beraud_Personnages.jpeg') center / cover no-repeat;
     border: 1px solid var(--grs-nb-glass-border);
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.22),
-        0 25px 50px rgba(0,0,0,0.35);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
     text-align: center;
 }
 .grs-nb,
 .grs-nb *,
 .grs-nb *::before,
 .grs-nb *::after { box-sizing: border-box; }
+
+/* Glass layer: sits between the image and the content, blurring
+   the image behind it. */
+.grs-nb__glass {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--grs-nb-glass);
+    -webkit-backdrop-filter: blur(var(--grs-nb-blur));
+    backdrop-filter: blur(var(--grs-nb-blur));
+    backdrop-filter: var(--grs-nb-filter);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
+    pointer-events: none;
+}
+
+.grs-nb__content {
+    position: relative;
+    z-index: 1;
+    padding: 48px 56px;
+}
 
 .grs-nb__tittel {
     margin: 0 0 12px;
@@ -124,8 +138,8 @@
 }
 
 @media (max-width: 600px) {
-    .grs-nb-section    { padding: 60px 16px; }
-    .grs-nb            { padding: 36px 26px; border-radius: 22px; }
+    .grs-nb            { border-radius: 22px; }
+    .grs-nb__content   { padding: 36px 26px; }
     .grs-nb__tittel    { font-size: 23px; }
     .grs-nb__ingress   { font-size: 14px; margin-bottom: 26px; }
     .grs-nb__rad--submit { flex-direction: column; }
@@ -146,8 +160,10 @@
     </filter>
 </svg>
 
-<div class="grs-nb-section">
-    <div class="grs-nb">
+<div class="grs-nb">
+    <div class="grs-nb__glass"></div>
+
+    <div class="grs-nb__content">
         <div class="grs-nb__tittel">Hold deg oppdatert</div>
         <div class="grs-nb__ingress">Meld deg på nyhetsbrevet og få informasjon om kommende konserter.</div>
 
