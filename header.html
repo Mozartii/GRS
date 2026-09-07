@@ -1,0 +1,580 @@
+<style>
+/* =========================================================
+   OPERA TIL FOLKET / GAMLE RAADHUS SCENE — CUSTOM HEADER
+   ========================================================= */
+:root {
+    --otf-header-height: 82px;
+    --otf-max-width: 1450px;
+    --otf-glass: rgba(0, 0, 0, 0.48);
+    --otf-glass-border: rgba(255, 255, 255, 0.16);
+    --otf-blur: 8px;
+    --otf-red: #670303;
+    --otf-red-hover: #821010;
+    --otf-transition: 0.28s ease;
+}
+
+/* ── RESET ───────────────────────────────────────────────── */
+.otf-header,
+.otf-header *,
+.otf-header *::before,
+.otf-header *::after { box-sizing: border-box; }
+.otf-header a { text-decoration: none !important; }
+
+/* ── HEADER ──────────────────────────────────────────────── */
+.otf-header {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: var(--otf-header-height);
+    z-index: 999999;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition:
+        border-color var(--otf-transition),
+        box-shadow var(--otf-transition);
+}
+
+/*
+   BACKDROP BLUR lives on ::before, NOT on the header element itself.
+   Reason: if the header element has backdrop-filter it becomes an
+   isolation group, and the mega menu (a child) can no longer blur
+   the actual page content — it only blurs the header's own layer.
+   With ::before carrying the blur, both the header bar and the mega
+   menu each filter the real page independently.
+*/
+.otf-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition:
+        background var(--otf-transition),
+        backdrop-filter var(--otf-transition),
+        -webkit-backdrop-filter var(--otf-transition);
+}
+
+/* ── TRANSPARENT STATE (at top, no glass) ────────────────── */
+.otf-header .otf-nav-link       { color: #000000 !important; }
+.otf-header .otf-menu-button    { color: #000000; }
+.otf-header .otf-menu-arrow     { border-color: #000000; }
+.otf-header .otf-logo img       { filter: none; }
+.otf-logo-divider               { background: rgba(0,0,0,0.35); }
+
+/* ── GLASS STATE (scrolled, hover, menu open) ────────────── */
+/* Glass: ::before gets blur + background */
+.otf-header.otf-scrolled::before,
+.otf-header:hover::before,
+.otf-header.otf-menu-open::before {
+    background: var(--otf-glass);
+    backdrop-filter: blur(var(--otf-blur));
+    -webkit-backdrop-filter: blur(var(--otf-blur));
+}
+/* Header itself: just border + shadow */
+.otf-header.otf-scrolled,
+.otf-header:hover,
+.otf-header.otf-menu-open {
+    border-bottom: 1px solid var(--otf-glass-border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+
+/* White text */
+.otf-header.otf-scrolled .otf-nav-link,
+.otf-header:hover .otf-nav-link,
+.otf-header.otf-menu-open .otf-nav-link { color: #ffffff !important; }
+
+/* White hamburger & arrow */
+.otf-header.otf-scrolled .otf-menu-button,
+.otf-header:hover .otf-menu-button,
+.otf-header.otf-menu-open .otf-menu-button { color: #ffffff; }
+.otf-header.otf-scrolled .otf-menu-arrow,
+.otf-header:hover .otf-menu-arrow,
+.otf-header.otf-menu-open .otf-menu-arrow { border-color: #ffffff; }
+
+/* White logos */
+.otf-header.otf-scrolled .otf-logo img,
+.otf-header:hover .otf-logo img,
+.otf-header.otf-menu-open .otf-logo img { filter: brightness(0) invert(1); }
+
+/* White divider */
+.otf-header.otf-scrolled .otf-logo-divider,
+.otf-header:hover .otf-logo-divider,
+.otf-header.otf-menu-open .otf-logo-divider { background: rgba(255,255,255,0.40); }
+
+/* ── HEADER INNER ────────────────────────────────────────── */
+.otf-header-inner {
+    width: min(calc(100% - 50px), var(--otf-max-width));
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* ── LOGOS ───────────────────────────────────────────────── */
+.otf-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-shrink: 0;
+}
+.otf-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+.otf-logo img {
+    display: block;
+    width: auto;
+    object-fit: contain;
+    transition: filter 0.28s ease;
+}
+.otf-logo-grs   img { height: 43px; max-width: 250px; }
+.otf-logo-divider   { width: 1px; height: 40px; flex-shrink: 0; transition: background 0.28s ease; }
+.otf-logo-opera img { height: 51px; max-width: 160px; }
+
+/* ── DESKTOP NAV ─────────────────────────────────────────── */
+.otf-main-nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-left: auto;
+}
+.otf-nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    transition: color 0.28s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+.otf-nav-link:hover { opacity: 0.65; transform: translateY(-1px); }
+.otf-nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 5px;
+    width: 0; height: 1px;
+    background: currentColor;
+    transition: width 0.25s ease;
+}
+.otf-nav-link:hover::after { width: 100%; }
+
+/* ── MENU BUTTON ─────────────────────────────────────────── */
+.otf-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0;
+    margin: 0;
+    border: 0 !important;
+    outline: none !important;
+    background: transparent !important;
+    cursor: pointer;
+    flex-shrink: 0;
+    min-width: 34px;
+    height: 40px;
+    transition: color 0.25s ease;
+}
+
+/* ☰ shown when closed, ✕ shown when open */
+.otf-burger-open  { font-size: 22px; line-height: 1; display: block; }
+.otf-burger-close { font-size: 18px; line-height: 1; display: none; }
+.otf-header.otf-menu-open .otf-burger-open  { display: none; }
+.otf-header.otf-menu-open .otf-burger-close { display: block; }
+
+/* Arrow (desktop only) */
+.otf-menu-arrow {
+    width: 6px; height: 6px;
+    margin-top: -3px;
+    border-right: 1.3px solid;
+    border-bottom: 1.3px solid;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease, margin-top 0.25s ease, border-color 0.25s ease;
+}
+.otf-header.otf-menu-open .otf-menu-arrow {
+    margin-top: 3px;
+    transform: rotate(225deg);
+}
+
+/* ── MEMBER BUTTON ───────────────────────────────────────── */
+.otf-member-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 22px;
+    flex-shrink: 0;
+    background: var(--otf-red);
+    color: #ffffff !important;
+    border-radius: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.otf-member-button:hover {
+    background: var(--otf-red-hover);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 20px rgba(0,0,0,0.20);
+}
+
+/* ── MEGA MENU ───────────────────────────────────────────── */
+.otf-mega-menu {
+    position: absolute;
+    top: var(--otf-header-height);
+    left: 0;
+    width: 100%;
+    padding: 34px 0 36px;
+    /* Own backdrop-filter: now works because the header element
+       itself has no backdrop-filter (::before carries it instead) */
+    background: var(--otf-glass);
+    backdrop-filter: blur(var(--otf-blur));
+    -webkit-backdrop-filter: blur(var(--otf-blur));
+    border-top: 1px solid rgba(255,255,255,0.10);
+    border-bottom: 1px solid var(--otf-glass-border);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+/* Desktop: show on hover or open */
+@media (min-width: 701px) {
+    .otf-header:hover .otf-mega-menu,
+    .otf-header.otf-menu-open .otf-mega-menu {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+}
+
+/* ── MEGA INNER GRID ─────────────────────────────────────── */
+.otf-mega-inner {
+    width: min(calc(100% - 50px), var(--otf-max-width));
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 60px;
+}
+
+/* Column headings */
+.otf-mega-column h3 {
+    margin: 0 0 10px;
+    padding: 0 0 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.22);
+    color: #ffffff !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+/* Column links */
+.otf-mega-column a {
+    display: block;
+    width: fit-content;
+    margin: 7px 0;
+    color: #ffffff !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.45;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.otf-mega-column a:hover {
+    color: #ffffff !important;
+    opacity: 0.60;
+    transform: translateX(3px);
+}
+
+/* ── SOCIALS — Facebook only, larger ────────────────────── */
+.otf-socials {
+    width: min(calc(100% - 50px), var(--otf-max-width));
+    margin: 24px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.otf-socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 50%;
+    color: #ffffff !important;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+.otf-socials a:hover {
+    background: rgba(255,255,255,0.14);
+    transform: translateY(-2px);
+}
+
+/* ── TABLET ──────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+    .otf-header-inner   { width: calc(100% - 40px); gap: 18px; }
+    .otf-logo-area      { gap: 13px; }
+    .otf-logo-grs img   { height: 39px; max-width: 210px; }
+    .otf-logo-opera img { height: 46px; max-width: 140px; }
+    .otf-main-nav       { gap: 20px; }
+    .otf-nav-link       { font-size: 12px; }
+    .otf-member-button  { padding: 0 17px; font-size: 12px; }
+    .otf-mega-inner     { width: calc(100% - 40px); gap: 40px; }
+    .otf-socials        { width: calc(100% - 40px); }
+}
+
+/* ── SMALL TABLET ────────────────────────────────────────── */
+@media (max-width: 950px) {
+    .otf-header-inner   { gap: 10px; }
+    .otf-logo-area      { gap: 9px; }
+    .otf-logo-grs img   { height: 34px; max-width: 170px; }
+    .otf-logo-opera img { height: 40px; max-width: 115px; }
+    .otf-main-nav       { gap: 13px; }
+    .otf-nav-link       { font-size: 11px; }
+    .otf-member-button  { min-height: 39px; padding: 0 12px; font-size: 11px; }
+}
+
+/* ── MOBILE ──────────────────────────────────────────────── */
+@media (max-width: 700px) {
+    :root { --otf-header-height: 70px; }
+    .otf-header         { height: var(--otf-header-height); }
+    .otf-header-inner   { width: calc(100% - 18px); gap: 6px; }
+
+    .otf-logo-area      { min-width: 0; flex: 1; gap: 7px; }
+    .otf-logo-grs       { min-width: 0; }
+    .otf-logo-grs img   { height: 29px; max-width: 125px; }
+    .otf-logo-divider   { height: 28px; }
+    .otf-logo-opera img { height: 36px; max-width: 95px; }
+
+    .otf-main-nav       { display: none; }
+
+    .otf-member-button  { min-height: 37px; padding: 0 10px; font-size: 10px; }
+    .otf-menu-button    { width: 30px; height: 38px; }
+    .otf-menu-arrow     { display: none; }
+    .otf-burger-open    { font-size: 20px; }
+
+    /* Mobile mega menu */
+    .otf-mega-menu {
+        position: absolute;
+        top: var(--otf-header-height);
+        left: 0;
+        width: 100%;
+        max-height: calc(100vh - var(--otf-header-height));
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 26px 0 32px;
+        background: var(--otf-glass);
+        backdrop-filter: blur(var(--otf-blur));
+        -webkit-backdrop-filter: blur(var(--otf-blur));
+    }
+    .otf-header.otf-menu-open .otf-mega-menu {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .otf-mega-inner     { width: calc(100% - 30px); grid-template-columns: 1fr; gap: 24px; }
+    .otf-mega-column h3 { font-size: 10px; letter-spacing: 1.3px; }
+    .otf-mega-column a  { font-size: 13px; margin: 5px 0; }
+    .otf-socials        { width: calc(100% - 30px); justify-content: flex-start; margin-top: 20px; }
+}
+
+/* ── SMALL PHONES ────────────────────────────────────────── */
+@media (max-width: 430px) {
+    .otf-header-inner   { width: calc(100% - 12px); gap: 4px; }
+    .otf-logo-area      { gap: 5px; }
+    .otf-logo-grs img   { height: 27px; max-width: 112px; }
+    .otf-logo-divider   { height: 25px; }
+    .otf-logo-opera img { height: 33px; max-width: 85px; }
+    .otf-member-button  { min-height: 35px; padding: 0 8px; font-size: 9px; }
+    .otf-menu-button    { width: 27px; }
+    .otf-burger-open    { font-size: 19px; }
+}
+
+/* ── VERY SMALL ──────────────────────────────────────────── */
+@media (max-width: 350px) {
+    .otf-logo-grs img   { max-width: 95px; }
+    .otf-logo-opera img { max-width: 72px; }
+    .otf-logo-divider   { display: none; }
+    .otf-member-button  { padding: 0 6px; font-size: 9px; }
+}
+
+/* ── REDUCED MOTION ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .otf-header,
+    .otf-header *,
+    .otf-header *::before,
+    .otf-header *::after { transition: none !important; }
+}
+</style>
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+<header class="otf-header" id="otfHeader">
+    <div class="otf-header-inner">
+
+        <!-- LOGOS -->
+        <div class="otf-logo-area">
+            <a href="/" class="otf-logo otf-logo-grs">
+                <img src="https://operatilfolket.no/wp-content/uploads/2022/06/Gamle-Raadhus-Scene-lille.png" alt="Gamle Raadhus Scene">
+            </a>
+            <span class="otf-logo-divider"></span>
+            <a href="https://operatilfolket.no" class="otf-logo otf-logo-opera">
+                <img src="https://operatilfolket.no/wp-content/uploads/2022/02/logo-full.png" alt="Opera til folket">
+            </a>
+        </div>
+
+        <!-- DESKTOP NAV -->
+        <nav class="otf-main-nav">
+            <a href="/" class="otf-nav-link">Hjem</a>
+            <a href="/program" class="otf-nav-link">Program</a>
+            <a href="/om-oss" class="otf-nav-link">Om oss</a>
+            <a href="/kontakt" class="otf-nav-link">Kontakt</a>
+        </nav>
+
+        <!-- MENU BUTTON -->
+        <button
+            type="button"
+            class="otf-menu-button"
+            id="otfMenuButton"
+            aria-label="Åpne meny"
+            aria-expanded="false"
+        >
+            <span class="otf-burger-open">☰</span>
+            <span class="otf-burger-close">✕</span>
+            <span class="otf-menu-arrow"></span>
+        </button>
+
+        <!-- MEMBER -->
+        <a href="/bli-medlem" class="otf-member-button">Bli medlem →</a>
+
+    </div>
+
+    <!-- =====================================================
+         MEGA MENU
+         ===================================================== -->
+    <div class="otf-mega-menu" id="otfMegaMenu">
+        <div class="otf-mega-inner">
+
+            <!-- GAMLE RAADHUS SCENE -->
+            <div class="otf-mega-column">
+                <h3>Gamle Raadhus Scene</h3>
+                <a href="/program">Program</a>
+                <a href="/booking">Booking</a>
+                <a href="/billetter">Billetter</a>
+                <a href="/bli-medlem">Bli medlem</a>
+                <a href="/tilgjengelighet">Tilgjengelighet</a>
+            </div>
+
+            <!-- OPERA TIL FOLKET -->
+            <div class="otf-mega-column">
+                <h3>Opera til Folket</h3>
+                <a href="https://operatilfolket.no/program">Program</a>
+                <a href="https://operatilfolket.no/oslo-operafestival">Oslo Operafestival</a>
+                <a href="https://operatilfolket.no/artister">Artister</a>
+                <a href="https://operatilfolket.no/prosjekter">Prosjekter</a>
+                <a href="https://operatilfolket.no/bli-med">Bli med</a>
+            </div>
+
+            <!-- FELLES -->
+            <div class="otf-mega-column">
+                <h3>Felles</h3>
+                <a href="/">Hjem</a>
+                <a href="/om-oss">Om oss</a>
+                <a href="/kontakt">Kontakt</a>
+                <a href="/presse">Presse</a>
+                <a href="/personvernerklaering">Personvernerklæring</a>
+            </div>
+
+        </div>
+
+        <!-- SOCIALS — Facebook only -->
+        <div class="otf-socials">
+            <a href="https://www.facebook.com/operatilfolket" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+<script>
+(function () {
+    "use strict";
+
+    var header     = document.getElementById("otfHeader");
+    var menuButton = document.getElementById("otfMenuButton");
+    var megaMenu   = document.getElementById("otfMegaMenu");
+
+    if (!header || !menuButton || !megaMenu) return;
+
+    /* ── SCROLL ───────────────────────────────────────────────
+       Glass appears the moment scrollY > 0 (any scroll at all).
+       ─────────────────────────────────────────────────────── */
+    function updateScroll() {
+        if (window.scrollY > 0) {
+            header.classList.add("otf-scrolled");
+        } else {
+            header.classList.remove("otf-scrolled");
+        }
+    }
+    updateScroll();
+    window.addEventListener("scroll", updateScroll, { passive: true });
+
+    /* ── OPEN / CLOSE ─────────────────────────────────────── */
+    function openMenu() {
+        header.classList.add("otf-menu-open");
+        menuButton.setAttribute("aria-expanded", "true");
+        menuButton.setAttribute("aria-label", "Lukk meny");
+    }
+    function closeMenu() {
+        header.classList.remove("otf-menu-open");
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.setAttribute("aria-label", "Åpne meny");
+    }
+
+    menuButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        header.classList.contains("otf-menu-open") ? closeMenu() : openMenu();
+    });
+
+    /* ESC */
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") closeMenu();
+    });
+
+    /* Close when a menu link is clicked */
+    megaMenu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () { closeMenu(); });
+    });
+
+    /* Click outside */
+    document.addEventListener("click", function (e) {
+        if (header.classList.contains("otf-menu-open") && !header.contains(e.target)) {
+            closeMenu();
+        }
+    });
+
+})();
+</script>
