@@ -9,7 +9,7 @@
     --otf-max-width: 1450px;
     --otf-glass: rgba(0, 0, 0, 0.48);
     --otf-glass-border: rgba(255, 255, 255, 0.16);
-    --otf-divider-color: rgba(0, 0, 0, 0.55);
+    --otf-divider-color: rgba(255, 255, 255, 0.85);
     --otf-blur: 12px;
     --otf-glass-filter: blur(var(--otf-blur)) saturate(160%) url(#otfGlassDistortion);
     --otf-red: #670303;
@@ -301,7 +301,7 @@
     transform: translateX(-50%);
     width: 220px;
     height: 2px;
-    background: linear-gradient(to right, transparent, var(--otf-divider-color) 25%, var(--otf-divider-color) 75%, transparent);
+    background: var(--otf-divider-color);
     pointer-events: none;
 }
 
@@ -345,7 +345,7 @@
     bottom: 0;
     width: 40px;
     height: 2px;
-    background: linear-gradient(to right, var(--otf-divider-color), transparent);
+    background: var(--otf-divider-color);
 }
 
 /* Column links */
