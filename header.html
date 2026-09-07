@@ -23,11 +23,11 @@
 .otf-header *::before,
 .otf-header *::after { box-sizing: border-box; }
 
-/* The header is position:fixed, so page content otherwise starts
-   flush underneath it. Reserve the header's own height plus 20px
-   of breathing room so content is never jammed against it. */
+/* The theme already reserves space for the fixed header itself —
+   adding the header's own height here on top of that doubled the
+   gap. Just a little extra air right at the very top instead. */
 body {
-    padding-top: calc(var(--otf-total-header-height) + 20px) !important;
+    padding-top: 20px !important;
 }
 .otf-header a { text-decoration: none !important; }
 
