@@ -35,9 +35,17 @@
     flex-direction: column;
     background: transparent;
     border-bottom: 1px solid transparent;
+    transform: translateY(0);
     transition:
+        transform 0.32s ease,
         border-color var(--otf-transition),
         box-shadow var(--otf-transition);
+}
+
+/* Slid up out of view while scrolling down; slides back in the
+   moment the user scrolls up. */
+.otf-header.otf-hide {
+    transform: translateY(-100%);
 }
 
 /* ── ANNOUNCEMENT BAR (≤800px only, replaces the member button) ─ */
@@ -625,12 +633,34 @@
 
     /* ── SCROLL ───────────────────────────────────────────────
        Glass appears the moment scrollY > 0 (any scroll at all).
+       The header itself hides while scrolling down and slides
+       back in the moment the user scrolls up.
        ─────────────────────────────────────────────────────── */
+    var lastScrollY   = window.scrollY;
+    var scrollDelta   = 6; // ignore tiny jitters so direction doesn't flicker
+
     function updateScroll() {
-        if (window.scrollY > 0) {
+        var currentY = window.scrollY;
+
+        if (currentY > 0) {
             header.classList.add("otf-scrolled");
         } else {
             header.classList.remove("otf-scrolled");
+        }
+
+        // Never hide while the mega menu is open.
+        if (header.classList.contains("otf-menu-open")) {
+            lastScrollY = currentY;
+            return;
+        }
+
+        if (Math.abs(currentY - lastScrollY) > scrollDelta) {
+            if (currentY > lastScrollY && currentY > header.offsetHeight) {
+                header.classList.add("otf-hide");
+            } else {
+                header.classList.remove("otf-hide");
+            }
+            lastScrollY = currentY;
         }
     }
     updateScroll();
@@ -639,6 +669,7 @@
     /* ── OPEN / CLOSE ─────────────────────────────────────── */
     function openMenu() {
         header.classList.add("otf-menu-open");
+        header.classList.remove("otf-hide");
         menuButton.setAttribute("aria-expanded", "true");
         menuButton.setAttribute("aria-label", "Lukk meny");
     }
