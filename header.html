@@ -184,8 +184,8 @@
     align-items: center;
     padding: 12px 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 400;
     line-height: 1;
     white-space: nowrap;
     transition: color 0.28s ease, opacity 0.2s ease, transform 0.2s ease;
@@ -290,7 +290,9 @@
 }
 
 /* Short, soft, dark seam where the mega menu meets the header —
-   replaces the old full-width hard-edged highlight line. */
+   replaces the old full-width hard-edged highlight line. A faded
+   gradient reads as "soft" reliably; filter: blur() on a 3px-tall
+   element rendered inconsistently (looked broken/dashed). */
 .otf-mega-menu::before {
     content: '';
     position: absolute;
@@ -298,9 +300,8 @@
     left: 50%;
     transform: translateX(-50%);
     width: 220px;
-    height: 3px;
-    background: var(--otf-divider-color);
-    filter: blur(4px);
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--otf-divider-color) 25%, var(--otf-divider-color) 75%, transparent);
     pointer-events: none;
 }
 
@@ -344,8 +345,7 @@
     bottom: 0;
     width: 40px;
     height: 2px;
-    background: var(--otf-divider-color);
-    filter: blur(2px);
+    background: linear-gradient(to right, var(--otf-divider-color), transparent);
 }
 
 /* Column links */
@@ -354,8 +354,8 @@
     width: fit-content;
     margin: 7px 0;
     color: #ffffff !important;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12px;
     font-weight: 400;
     line-height: 1.45;
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -398,7 +398,7 @@
     .otf-logo-grs img   { height: 39px; max-width: 210px; }
     .otf-logo-opera img { height: 46px; max-width: 140px; }
     .otf-main-nav       { gap: 20px; }
-    .otf-nav-link       { font-size: 14px; }
+    .otf-nav-link       { font-size: 13px; }
     .otf-member-button  { padding: 0 17px; font-size: 12px; }
     .otf-mega-inner     { width: calc(100% - 40px); gap: 40px; }
     .otf-socials        { width: calc(100% - 40px); }
@@ -411,7 +411,7 @@
     .otf-logo-grs img   { height: 34px; max-width: 170px; }
     .otf-logo-opera img { height: 40px; max-width: 115px; }
     .otf-main-nav       { gap: 13px; }
-    .otf-nav-link       { font-size: 13px; }
+    .otf-nav-link       { font-size: 12px; }
     .otf-member-button  { min-height: 39px; padding: 0 12px; font-size: 11px; }
 }
 
@@ -468,7 +468,7 @@
 
     .otf-mega-inner     { width: calc(100% - 30px); grid-template-columns: 1fr; gap: 24px; }
     .otf-mega-column h3 { font-size: 10px; letter-spacing: 1.3px; }
-    .otf-mega-column a  { font-size: 13px; margin: 5px 0; }
+    .otf-mega-column a  { font-size: 12px; margin: 5px 0; }
     .otf-socials        { width: calc(100% - 30px); justify-content: flex-start; margin-top: 20px; }
 }
 
