@@ -25,13 +25,15 @@
 .otf-header a { text-decoration: none !important; }
 
 /* ── HEADER ──────────────────────────────────────────────── */
-/* position: absolute (not fixed) — the header sits at the top of
-   the page and scrolls away with the rest of the content instead
-   of staying pinned to the viewport. Once you've scrolled past it,
-   scrolling back up brings it in again as a fixed bar (.otf-sticky)
-   that fades + slides down into view. */
+/* Always position: fixed -- this is what guarantees it actually
+   shows up reliably no matter how the page scrolls (some themes/
+   plugins use transform-based "smooth scroll" that doesn't track
+   cleanly against window.scrollY, which is what broke the earlier
+   absolute+threshold approach). Visibility is handled purely by
+   sliding it off-screen with a transform instead: hidden while
+   scrolling down, slid smoothly back into view on any scroll up. */
 .otf-header {
-    position: absolute;
+    position: fixed;
     top: 0; left: 0;
     width: 100%;
     height: var(--otf-total-header-height);
@@ -40,24 +42,14 @@
     flex-direction: column;
     background: transparent;
     border-bottom: 1px solid transparent;
+    transform: translateY(0);
     transition:
+        transform 0.35s ease,
         border-color var(--otf-transition),
         box-shadow var(--otf-transition);
 }
-
-.otf-header.otf-sticky {
-    position: fixed;
-    opacity: 0;
-    pointer-events: none;
-    /* Appears/disappears instantly — no opacity or transform
-       transition here, only the glass hover/scroll ones. */
-    transition:
-        border-color var(--otf-transition),
-        box-shadow var(--otf-transition);
-}
-.otf-header.otf-sticky.otf-sticky-visible {
-    opacity: 1;
-    pointer-events: auto;
+.otf-header.otf-hide {
+    transform: translateY(-100%);
 }
 
 /* ── ANNOUNCEMENT BAR (≤800px only, replaces the member button) ─ */
@@ -638,10 +630,8 @@
 
     /* ── SCROLL ───────────────────────────────────────────────
        Glass appears the moment scrollY > 0 (any scroll at all).
-       Once you've scrolled past the header's own height, scrolling
-       back up brings it in again as a fixed bar that fades + slides
-       down; scrolling back down hides it. Near the top it's just
-       the plain header in its normal (absolute) position.
+       The header itself hides while scrolling down and slides
+       smoothly back into view the moment the user scrolls up.
        ─────────────────────────────────────────────────────── */
     var lastScrollY = window.scrollY;
 
@@ -659,20 +649,10 @@
             return;
         }
 
-        var stickThreshold = header.offsetHeight;
-
-        if (currentY <= stickThreshold) {
-            header.classList.remove("otf-sticky", "otf-sticky-visible");
+        if (currentY > lastScrollY && currentY > header.offsetHeight) {
+            header.classList.add("otf-hide");
         } else {
-            header.classList.add("otf-sticky");
-            // Any upward movement at all reveals it instantly.
-            if (currentY !== lastScrollY) {
-                if (currentY < lastScrollY) {
-                    header.classList.add("otf-sticky-visible");
-                } else {
-                    header.classList.remove("otf-sticky-visible");
-                }
-            }
+            header.classList.remove("otf-hide");
         }
 
         lastScrollY = currentY;
@@ -683,6 +663,7 @@
     /* ── OPEN / CLOSE ─────────────────────────────────────── */
     function openMenu() {
         header.classList.add("otf-menu-open");
+        header.classList.remove("otf-hide");
         menuButton.setAttribute("aria-expanded", "true");
         menuButton.setAttribute("aria-label", "Lukk meny");
     }
