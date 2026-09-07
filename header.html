@@ -4,9 +4,12 @@
    ========================================================= */
 :root {
     --otf-header-height: 82px;
+    --otf-total-header-height: var(--otf-header-height);
+    --otf-announce-height: 36px;
     --otf-max-width: 1450px;
     --otf-glass: rgba(0, 0, 0, 0.48);
     --otf-glass-border: rgba(255, 255, 255, 0.16);
+    --otf-divider-color: rgba(0, 0, 0, 0.55);
     --otf-blur: 12px;
     --otf-glass-filter: blur(var(--otf-blur)) saturate(160%) url(#otfGlassDistortion);
     --otf-red: #670303;
@@ -26,13 +29,32 @@
     position: fixed;
     top: 0; left: 0;
     width: 100%;
-    height: var(--otf-header-height);
+    height: var(--otf-total-header-height);
     z-index: 999999;
+    display: flex;
+    flex-direction: column;
     background: transparent;
     border-bottom: 1px solid transparent;
     transition:
         border-color var(--otf-transition),
         box-shadow var(--otf-transition);
+}
+
+/* ── ANNOUNCEMENT BAR (≤800px only, replaces the member button) ─ */
+.otf-announce-bar {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    height: var(--otf-announce-height);
+    background: var(--otf-red);
+}
+.otf-announce-bar a {
+    color: #ffffff !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
 }
 
 /*
@@ -119,7 +141,8 @@
 /* ── HEADER INNER ────────────────────────────────────────── */
 .otf-header-inner {
     width: min(calc(100% - 50px), var(--otf-max-width));
-    height: 100%;
+    height: var(--otf-header-height);
+    flex-shrink: 0;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -160,8 +183,8 @@
     display: inline-flex;
     align-items: center;
     padding: 12px 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 15px;
     font-weight: 600;
     line-height: 1;
     white-space: nowrap;
@@ -244,7 +267,7 @@
 /* ── MEGA MENU ───────────────────────────────────────────── */
 .otf-mega-menu {
     position: absolute;
-    top: var(--otf-header-height);
+    top: var(--otf-total-header-height);
     left: 0;
     width: 100%;
     padding: 34px 0 36px;
@@ -258,14 +281,27 @@
     backdrop-filter: var(--otf-glass-filter);
     border: 1px solid var(--otf-glass-border);
     border-top: none;
-    box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.22),
-        0 25px 50px rgba(0,0,0,0.35);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     transform: translateY(-6px);
     transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+
+/* Short, soft, dark seam where the mega menu meets the header —
+   replaces the old full-width hard-edged highlight line. */
+.otf-mega-menu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 3px;
+    background: var(--otf-divider-color);
+    filter: blur(4px);
+    pointer-events: none;
 }
 
 /* Desktop: show on hover or open */
@@ -290,9 +326,9 @@
 
 /* Column headings */
 .otf-mega-column h3 {
+    position: relative;
     margin: 0 0 10px;
     padding: 0 0 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.22);
     color: #ffffff !important;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 10px;
@@ -300,6 +336,16 @@
     letter-spacing: 1.6px;
     line-height: 1.3;
     text-transform: uppercase;
+}
+.otf-mega-column h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--otf-divider-color);
+    filter: blur(2px);
 }
 
 /* Column links */
@@ -352,7 +398,7 @@
     .otf-logo-grs img   { height: 39px; max-width: 210px; }
     .otf-logo-opera img { height: 46px; max-width: 140px; }
     .otf-main-nav       { gap: 20px; }
-    .otf-nav-link       { font-size: 12px; }
+    .otf-nav-link       { font-size: 14px; }
     .otf-member-button  { padding: 0 17px; font-size: 12px; }
     .otf-mega-inner     { width: calc(100% - 40px); gap: 40px; }
     .otf-socials        { width: calc(100% - 40px); }
@@ -365,14 +411,24 @@
     .otf-logo-grs img   { height: 34px; max-width: 170px; }
     .otf-logo-opera img { height: 40px; max-width: 115px; }
     .otf-main-nav       { gap: 13px; }
-    .otf-nav-link       { font-size: 11px; }
+    .otf-nav-link       { font-size: 13px; }
     .otf-member-button  { min-height: 39px; padding: 0 12px; font-size: 11px; }
+}
+
+/* ── ANNOUNCEMENT BAR REPLACES MEMBER BUTTON (≤800px) ───────
+   Below 800px the "Bli medlem" button leaves the nav row and
+   becomes a full-width bar above it instead, so header height
+   grows to fit both.
+   ─────────────────────────────────────────────────────────── */
+@media (max-width: 800px) {
+    :root { --otf-total-header-height: calc(var(--otf-header-height) + var(--otf-announce-height)); }
+    .otf-member-button { display: none; }
+    .otf-announce-bar   { display: flex; }
 }
 
 /* ── MOBILE ──────────────────────────────────────────────── */
 @media (max-width: 700px) {
     :root { --otf-header-height: 70px; }
-    .otf-header         { height: var(--otf-header-height); }
     .otf-header-inner   { width: calc(100% - 18px); gap: 6px; }
 
     .otf-logo-area      { min-width: 0; flex: 1; gap: 7px; }
@@ -391,10 +447,10 @@
     /* Mobile mega menu */
     .otf-mega-menu {
         position: absolute;
-        top: var(--otf-header-height);
+        top: var(--otf-total-header-height);
         left: 0;
         width: 100%;
-        max-height: calc(100vh - var(--otf-header-height));
+        max-height: calc(100vh - var(--otf-total-header-height));
         overflow-y: auto;
         overflow-x: hidden;
         padding: 26px 0 32px;
@@ -463,6 +519,12 @@
      HEADER
      ========================================================= -->
 <header class="otf-header" id="otfHeader">
+
+    <!-- ANNOUNCEMENT BAR (≤800px — replaces the "Bli medlem" button) -->
+    <div class="otf-announce-bar">
+        <a href="/bli-medlem">Bli medlem →</a>
+    </div>
+
     <div class="otf-header-inner">
 
         <!-- LOGOS -->
