@@ -77,7 +77,7 @@
 .otf-header.otf-scrolled,
 .otf-header:hover,
 .otf-header.otf-menu-open {
-    border-bottom: 1px solid var(--otf-glass-border);
+    border-bottom: 1px solid var(--otf-red);
     box-shadow: 0 4px 20px rgba(0,0,0,0.12);
 }
 
@@ -95,9 +95,16 @@
 .otf-header.otf-menu-open .otf-menu-arrow { border-color: #ffffff; }
 
 /* White logos */
-.otf-header.otf-scrolled .otf-logo img,
-.otf-header:hover .otf-logo img,
-.otf-header.otf-menu-open .otf-logo img { filter: brightness(0) invert(1); }
+.otf-header.otf-scrolled .otf-logo-opera img,
+.otf-header:hover .otf-logo-opera img,
+.otf-header.otf-menu-open .otf-logo-opera img { filter: brightness(0) invert(1); }
+
+/* GRS logo: true color inversion (keeps the icon detail — black circle
+   becomes white, white icon becomes black — instead of flattening it
+   to a solid white blob). */
+.otf-header.otf-scrolled .otf-logo-grs img,
+.otf-header:hover .otf-logo-grs img,
+.otf-header.otf-menu-open .otf-logo-grs img { filter: invert(1); }
 
 /* White divider */
 .otf-header.otf-scrolled .otf-logo-divider,
