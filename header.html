@@ -27,7 +27,9 @@
 /* ── HEADER ──────────────────────────────────────────────── */
 /* position: absolute (not fixed) — the header sits at the top of
    the page and scrolls away with the rest of the content instead
-   of staying pinned to the viewport. */
+   of staying pinned to the viewport. Once you've scrolled past it,
+   scrolling back up brings it in again as a fixed bar (.otf-sticky)
+   that fades + slides down into view. */
 .otf-header {
     position: absolute;
     top: 0; left: 0;
@@ -41,6 +43,23 @@
     transition:
         border-color var(--otf-transition),
         box-shadow var(--otf-transition);
+}
+
+.otf-header.otf-sticky {
+    position: fixed;
+    opacity: 0;
+    transform: translateY(-16px);
+    pointer-events: none;
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease,
+        border-color var(--otf-transition),
+        box-shadow var(--otf-transition);
+}
+.otf-header.otf-sticky.otf-sticky-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 /* ── ANNOUNCEMENT BAR (≤800px only, replaces the member button) ─ */
@@ -223,22 +242,22 @@
 }
 
 /* ☰ shown when closed, ✕ shown when open */
-.otf-burger-open  { font-size: 22px; line-height: 1; display: block; }
-.otf-burger-close { font-size: 18px; line-height: 1; display: none; }
+.otf-burger-open  { font-size: 26px; line-height: 1; display: block; }
+.otf-burger-close { font-size: 21px; line-height: 1; display: none; }
 .otf-header.otf-menu-open .otf-burger-open  { display: none; }
 .otf-header.otf-menu-open .otf-burger-close { display: block; }
 
 /* Arrow (desktop only) */
 .otf-menu-arrow {
-    width: 6px; height: 6px;
-    margin-top: -3px;
-    border-right: 1.3px solid;
-    border-bottom: 1.3px solid;
+    width: 8px; height: 8px;
+    margin-top: -4px;
+    border-right: 1.6px solid;
+    border-bottom: 1.6px solid;
     transform: rotate(45deg);
     transition: transform 0.25s ease, margin-top 0.25s ease, border-color 0.25s ease;
 }
 .otf-header.otf-menu-open .otf-menu-arrow {
-    margin-top: 3px;
+    margin-top: 4px;
     transform: rotate(225deg);
 }
 
@@ -247,15 +266,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 44px;
-    padding: 0 22px;
+    min-height: 50px;
+    padding: 0 26px;
     flex-shrink: 0;
     background: var(--otf-red);
     color: #ffffff !important;
     border-radius: 5px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    font-weight: 600;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
     line-height: 1;
     white-space: nowrap;
     transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
@@ -397,7 +416,7 @@
     .otf-logo-opera img { height: 46px; max-width: 140px; }
     .otf-main-nav       { gap: 20px; }
     .otf-nav-link       { font-size: 15px; }
-    .otf-member-button  { padding: 0 17px; font-size: 12px; }
+    .otf-member-button  { padding: 0 22px; font-size: 15px; }
     .otf-mega-inner     { width: calc(100% - 40px); gap: 50px; }
     .otf-socials        { width: calc(100% - 40px); }
 }
@@ -410,7 +429,7 @@
     .otf-logo-opera img { height: 40px; max-width: 115px; }
     .otf-main-nav       { gap: 13px; }
     .otf-nav-link       { font-size: 14px; }
-    .otf-member-button  { min-height: 39px; padding: 0 12px; font-size: 11px; }
+    .otf-member-button  { min-height: 46px; padding: 0 18px; font-size: 14px; }
 }
 
 /* ── ANNOUNCEMENT BAR REPLACES MEMBER BUTTON (≤800px) ───────
@@ -621,13 +640,44 @@
 
     /* ── SCROLL ───────────────────────────────────────────────
        Glass appears the moment scrollY > 0 (any scroll at all).
+       Once you've scrolled past the header's own height, scrolling
+       back up brings it in again as a fixed bar that fades + slides
+       down; scrolling back down hides it. Near the top it's just
+       the plain header in its normal (absolute) position.
        ─────────────────────────────────────────────────────── */
+    var lastScrollY = window.scrollY;
+    var scrollDelta  = 6; // ignore tiny jitters so direction doesn't flicker
+
     function updateScroll() {
-        if (window.scrollY > 0) {
+        var currentY = window.scrollY;
+
+        if (currentY > 0) {
             header.classList.add("otf-scrolled");
         } else {
             header.classList.remove("otf-scrolled");
         }
+
+        if (header.classList.contains("otf-menu-open")) {
+            lastScrollY = currentY;
+            return;
+        }
+
+        var stickThreshold = header.offsetHeight;
+
+        if (currentY <= stickThreshold) {
+            header.classList.remove("otf-sticky", "otf-sticky-visible");
+        } else {
+            header.classList.add("otf-sticky");
+            if (Math.abs(currentY - lastScrollY) > scrollDelta) {
+                if (currentY < lastScrollY) {
+                    header.classList.add("otf-sticky-visible");
+                } else {
+                    header.classList.remove("otf-sticky-visible");
+                }
+            }
+        }
+
+        lastScrollY = currentY;
     }
     updateScroll();
     window.addEventListener("scroll", updateScroll, { passive: true });
